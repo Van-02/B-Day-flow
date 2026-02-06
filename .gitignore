@@ -1,6 +1,13 @@
-.env
-token.json
-credentials.json
-venv/
-__pycache__/
-templates.py
+# Ignore everithing
+/*
+!tests
+!utils
+!__init__.py
+!calendar_service.py
+!config.py
+!main.py
+!README.es.md
+!README.md
+!requirements.txt
+!templates.py
+!whatsapp_client.py

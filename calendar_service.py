@@ -105,9 +105,9 @@ def get_todays_birthdays():
             if phone_number:
                 birthday_list.append(
                     {
-                        "name": client_name,
+                        "name": client_name.title(),
                         "phone": phone_number,
-                        "seller": seller_name,
+                        "seller": seller_name.title(),
                     }
                 )
 
