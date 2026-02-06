@@ -1,5 +1,7 @@
 import pytest
-from unittest.mock import patch, MagicMock
+from unittest.mock import MagicMock, patch
+
+import requests
 from whatsapp_client import send_whatsapp_message
 
 
@@ -7,24 +9,19 @@ from whatsapp_client import send_whatsapp_message
 def test_send_whatsapp_message_success(mock_post):
     mock_response = MagicMock()
     mock_response.status_code = 200
-    mock_response.json.return_value = {"message": {"id": "ABC_123"}}
     mock_post.return_value = mock_response
 
-    result = send_whatsapp_message("5492604123456", "Hi Test")
+    result = send_whatsapp_message("5492604123456", "Hi test")
 
-    assert result == "ABC_123"
+    assert result is True
+
     args, kwargs = mock_post.call_args
-    assert (
-        "https://gate.whapi.cloud/messages/text" in args
-        or kwargs.get("url") == "https://gate.whapi.cloud/messages/text"
-    )
-    assert kwargs["json"]["body"] == "Hi Test"
+    assert kwargs["json"]["text"] == "Hi test"
 
 
 @patch("whatsapp_client.requests.post")
 def test_send_whatsapp_message_failure(mock_post):
-    mock_post.side_effect = Exception("API Error")
+    mock_post.side_effect = requests.exceptions.RequestException("API Error")
 
-    result = send_whatsapp_message("5492604123456", "Hi Test")
-
-    assert result is None
+    with pytest.raises(requests.exceptions.RequestException):
+        send_whatsapp_message("5492604123456", "Hi test")
