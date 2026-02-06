@@ -1,0 +1,4 @@
+# Create a templates.py file o rename this file removing the format .example
+MESSAGES = {
+    "generic": "Hello world!"
+}
