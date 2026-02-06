@@ -1,1 +1,0 @@
-MESSAGES = {"generic": "Generic message"}
