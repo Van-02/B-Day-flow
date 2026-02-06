@@ -1,45 +1,40 @@
-import os
 import requests
+from tenacity import (
+    retry,
+    retry_if_exception_type,
+    stop_after_attempt,
+    wait_exponential,
+)
 from config import Config
 from utils.helpers import clean_format_number
 
 
+@retry(
+    retry=retry_if_exception_type(requests.exceptions.RequestException),
+    wait=wait_exponential(multiplier=2, min=2, max=10),
+    stop=stop_after_attempt(3),
+)
 def send_whatsapp_message(number, message_body):
     """
-    Sends a text message via Whapi Cloud API.
+    Sends a text message via Evolution API.
     Ensures numbers are properly formatted for international WhatsApp delivery.
     """
-    token = Config.WHAPI_TOKEN
-    url = Config.WHAPI_URL
-    if not token:
-        print("ERROR: WHAPI_TOKEN not found")
-        return None
+    token = Config.EVOLUTION_TOKEN
+    url = Config.EVOLUTION_URL
 
     # Standardize the phone number format using regex helper
     clean_number = clean_format_number(number)
 
-    # Construct the JSON payload required by Whapi
     payload = {
-        "typing_time": 0,
-        "to": f"{clean_number}@s.whatsapp.net",
-        "body": message_body,
+        "number": clean_number,
+        "text": message_body,
+        "delay": 1200,
+        "linkPreview": True,
     }
 
-    headers = {
-        "accept": "application/json",
-        "content-type": "application/json",
-        "authorization": f"Bearer {token}",
-    }
+    headers = {"Content-Type": "application/json", "apikey": token}
 
-    try:
-        # Perform the HTTP POST request to Whapi
-        response = requests.post(url, json=payload, headers=headers)
-        response.raise_for_status()  # Trigger exception for 4xx/5xx status codes
-        print(f"Message sent via Whapi to {clean_number}!")
-        return response.json().get("message", {}).get("id")
-    except Exception as e:
-        print(f"Error calling Whapi API: {e}")
-        # Safe check for response object existence in case of connection failure
-        if "response" in locals():
-            print(f"Response: {response.text}")
-        return None
+    response = requests.post(url, json=payload, headers=headers)
+    response.raise_for_status()  # Trigger exception for 4xx/5xx status codes
+    print(f"Message sent succesfully to {clean_number}!")
+    return True
