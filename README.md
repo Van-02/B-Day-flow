@@ -5,22 +5,20 @@
 - [🇪🇸 Español](./README.es.md)
 - 🇺🇸 English
 
-**B-Day Flow** is a professional Python automation tool that synchronizes Google Calendar events with WhatsApp. It automatically identifies today's birthdays from a specific calendar and sends personalized greetings via the Whapi.Cloud API.
+**B-Day Flow** is a professional Python automation tool that synchronizes Google Calendar events with WhatsApp. The system automatically identifies birthdays for the current day and sends personalized greetings using Evolution API.
 
 ## 🚀 Key Features
 
 - **Google Calendar Integration:** Fetches events in real-time using Google Discovery API.
-- **Automated WhatsApp Messaging:** Sends personalized messages via Whapi Cloud.
+- **Automated WhatsApp Messaging:** Sends personalized messages via Evolution API.
 - **Smart Parsing:** Extracts client names, phone numbers, and seller info directly from event descriptions.
 - **Robust Testing:** Includes a full suite of unit tests with Mocks for API stability.
-- **Configurable:** Centralized management of environment variables and retry delays.
 
 ## 🛠️ Tech Stack
 
-- **Language:** Python 3.14+
-- **APIs:** Google Calendar API v3, Whapi.Cloud
-- **Testing:** Pytest
-- **Environment:** Dotenv for secret management
+- **Language:** [Python 3.14+](www.python.org)
+- **APIs:** [Google Calendar API v3](https://developers.google.com/workspace/calendar/api/guides/overview?hl=es-419), [Evolution API](https://github.com/EvolutionAPI/evolution-api)
+- **Testing:** [Pytest](https://docs.pytest.org/en/stable/index.html)
 
 ## 📦 Project Structure
 
@@ -34,6 +32,24 @@ BdayFlow/
 ├── main.py             # Main execution orchestrator
 └── templates.py        # Message templates
 ```
+
+## 🐳 Docker Deployment (Recommended)
+
+1. Build and start the containers:
+
+```Bash
+docker-compose up -d --build
+```
+
+1. Google Auth
+
+The first time you run it, the container will need you to log in to Google. Check the logs to find the authentication link:
+
+```Bash
+docker logs -f bday-flow
+```
+
+_Note: Ensure `credentials.json` is in the root directory before starting_
 
 ## ⚙️ Setup & Installation
 
@@ -60,8 +76,7 @@ pip install -r requirements.text
 1. **Configure Environment Variables**: Create a `.env` file in the root directory:
 
 ```Code
-WHAPI_TOKEN=your_whapi_token_here
-WHAPI_URL=[https://gate.whapi.cloud/messages/text](https://gate.whapi.cloud/messages/text)
+AUTHENTICATION_API_KEY=your_evolution_api_key
 GOOGLE_CALENDAR_ID=your_calendar_id@group.calendar.google.com
 ```
 
