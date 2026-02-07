@@ -11,3 +11,6 @@
 !requirements.txt
 !templates.py.example
 !whatsapp_client.py
+!.dockerignore
+!docker-compose.yml
+!Dockerfile

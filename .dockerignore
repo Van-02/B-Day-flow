@@ -1,0 +1,8 @@
+__pycache__/
+*.py[cod]
+venv/
+.env
+token.json
+bday_flow.log
+.git
+.github
